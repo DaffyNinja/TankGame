@@ -23,6 +23,8 @@ public class TurretMove : MonoBehaviour
     Vector3 fwd;
     GameObject miss;
 
+    TankMove tMove;
+
     // Use this for initialization
     void Start()
     {
@@ -30,12 +32,14 @@ public class TurretMove : MonoBehaviour
 
         pivot = transform.FindChild("New Pivot");
 
+        tMove = GetComponentInParent<TankMove>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (useTurret)
+        if (tMove.canMoveTurret)
         {
 
             fwd = transform.TransformDirection(Vector3.forward);
@@ -46,16 +50,14 @@ public class TurretMove : MonoBehaviour
 
             // transform.Rotate(0, turnInput * rotateSpeed, 0);
             // rig.AddRelativeTorque(0, turnInput * rotateSpeed, 0);
+        }
 
+        if (Input.GetKeyDown(KeyCode.RightControl))
+        {
+            miss = Instantiate(missleObj, missileShotPos.position, Quaternion.Euler(90, 0, 0)) as GameObject;
 
-            if (Input.GetKeyDown(KeyCode.RightControl))
-            {
-                miss = Instantiate(missleObj, missileShotPos.position, Quaternion.Euler(90, 0, 0)) as GameObject;
-
-                // Vector3 vForce = transform.forward * missleSpeed + transform.forward;
-                miss.GetComponent<Rigidbody>().AddForce(fwd * missleSpeed, ForceMode.Impulse);
-            }
-
+            // Vector3 vForce = transform.forward * missleSpeed + transform.forward;
+            miss.GetComponent<Rigidbody>().AddForce(fwd * missleSpeed, ForceMode.Impulse);
         }
 
 
